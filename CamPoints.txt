@@ -1,0 +1,60 @@
+//@version=5
+indicator("Camarilla Pivot Points", overlay=true)
+
+// Request previous day's high, low, and close prices
+prevHigh = request.security(syminfo.tickerid, "D", high[1], lookahead=barmerge.lookahead_on)
+prevLow = request.security(syminfo.tickerid, "D", low[1], lookahead=barmerge.lookahead_on)
+prevClose = request.security(syminfo.tickerid, "D", close[1], lookahead=barmerge.lookahead_on)
+
+// Calculate Camarilla Pivot Points
+pivotPoint = (prevHigh + prevLow + prevClose) / 3
+
+r4 = (prevHigh - prevLow) * 1.1 / 2 + prevClose
+r3 = (prevHigh - prevLow) * 1.1 / 4 + prevClose
+r2 = (prevHigh - prevLow) * 1.1 / 6 + prevClose
+r1 = (prevHigh - prevLow) * 1.1 / 12 + prevClose
+
+s1 = prevClose - (prevHigh - prevLow) * 1.1 / 12
+s2 = prevClose - (prevHigh - prevLow) * 1.1 / 6
+s3 = prevClose - (prevHigh - prevLow) * 1.1 / 4
+s4 = prevClose - (prevHigh - prevLow) * 1.1 / 2
+
+breakoutTarget = prevClose + (prevHigh - prevLow) * 1.1
+breakdownTarget = prevClose - (prevHigh - prevLow) * 1.1
+
+// Plot Camarilla Pivot Points as horizontal lines
+plot(pivotPoint, color=color.blue, title="Pivot Point", linewidth=1, style=plot.style_line)
+plot(r4, color=color.red, title="R4", linewidth=1, style=plot.style_line)
+plot(r3, color=color.red, title="R3", linewidth=1, style=plot.style_line)
+plot(r2, color=color.red, title="R2", linewidth=1, style=plot.style_line)
+plot(r1, color=color.red, title="R1", linewidth=1, style=plot.style_line)
+plot(s1, color=color.green, title="S1", linewidth=1, style=plot.style_line)
+plot(s2, color=color.green, title="S2", linewidth=1, style=plot.style_line)
+plot(s3, color=color.green, title="S3", linewidth=1, style=plot.style_line)
+plot(s4, color=color.green, title="S4", linewidth=1, style=plot.style_line)
+plot(breakoutTarget, color=color.green, title="Breakout Target", linewidth=1, style=plot.style_line)
+plot(breakdownTarget, color=color.red, title="Breakdown Target", linewidth=1, style=plot.style_line)
+
+// Optional: Add labels to the lines (similar to Thinkorswim bubbles)
+if (na(pivotPoint) == false)
+    label.new(bar_index, pivotPoint, "PP", color=color.gray, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(r4) == false)
+    label.new(bar_index, r4, "R4", color=color.red, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(r3) == false)
+    label.new(bar_index, r3, "R3", color=color.red, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(r2) == false)
+    label.new(bar_index, r2, "R2", color=color.red, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(r1) == false)
+    label.new(bar_index, r1, "R1", color=color.red, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(s1) == false)
+    label.new(bar_index, s1, "S1", color=color.green, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(s2) == false)
+    label.new(bar_index, s2, "S2", color=color.green, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(s3) == false)
+    label.new(bar_index, s3, "S3", color=color.green, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(s4) == false)
+    label.new(bar_index, s4, "S4", color=color.green, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(breakoutTarget) == false)
+    label.new(bar_index, breakoutTarget, "BT", color=color.green, textcolor=color.white, style=label.style_label_down, size=size.small)
+if (na(breakdownTarget) == false)
+    label.new(bar_index, breakdownTarget, "BD", color=color.red, textcolor=color.white, style=label.style_label_down, size=size.small)
